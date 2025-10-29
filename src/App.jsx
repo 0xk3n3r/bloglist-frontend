@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import Notification from './components/Notification'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -12,6 +13,8 @@ const App = () => {
   const [password, setPassword] = useState('') 
   const [user, setUser] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [notification, setNotification] = useState(null)
+  const [notificationType, setNotificationType] = useState('success')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -41,11 +44,15 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-    } catch {
-      setErrorMessage('wrong credentials')
+      setNotification(`Welcome ${user.name}`)
+      setNotificationType('success')
       setTimeout(() => {
-        setErrorMessage(null)
+        setNotification(null)
       }, 5000)
+    } catch (error) {
+      console.log('Login failed:', error)
+      setNotification('Wrong username or password')
+      setNotificationType('error')
     }
   }
 
@@ -73,9 +80,18 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
+
+      setNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
+      setNotificationType('success')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     } catch (error) {
       console.error('Error creating blog:', error)
     }
+    setTimeout(() => {
+    setNotification(null)
+  }, 5000)
   }
 
   const loginForm = () => (
@@ -137,7 +153,9 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {errorMessage && <div className="error">{errorMessage}</div>}
+      {notification && (
+      <Notification message={notification} type={notificationType} />
+      )}
       <p>{user.name} logged in</p>
       <button onClick={handleLogout}>logout</button>
       {blogForm()}
