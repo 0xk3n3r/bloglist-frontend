@@ -124,21 +124,17 @@ const App = () => {
   </form>
   )
 
+  if (user === null) {
+    return loginForm()
+  }
+
   return (
     <div>
       <h2>blogs</h2>
-      {!user && loginForm()}
-      {user && (
-      <div>
-        <p>{user.name} logged in</p>
-        {blogForm()}
-
-        
-        {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} />
-        )}
-      </div>
-    )}
+      <p>{user.name} logged in</p>
+      {blogs.map(blog => (
+        <Blog key={blog.id} blog={blog} />
+      ))}
     </div>
   )
 }
