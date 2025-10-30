@@ -94,7 +94,7 @@ const App = () => {
   }, 5000)
   }
 
-  const loginForm = () => (
+  const LoginForm = ({ handleLogin }) => (
     <form onSubmit={handleLogin}>
       <div>
         username
@@ -146,25 +146,27 @@ const App = () => {
   </form>
   )
 
-  if (user === null) {
-    return loginForm()
-  }
-
   return (
-    <div>
-      <h2>blogs</h2>
-      {notification && (
+  <div>
+    <h2>blogs</h2>
+    {notification && (
       <Notification message={notification} type={notificationType} />
-      )}
-      <p>{user.name} logged in</p>
-      <button onClick={handleLogout}>logout</button>
-      {blogForm()}
-      <h2>Blog List</h2>
-      {blogs.map(blog => (
-        <Blog key={blog.id} blog={blog} />
-      ))}
-    </div>
-  )
+    )}
+    {user === null ? (
+      <LoginForm handleLogin={handleLogin} />
+    ) : (
+      <div>
+        <p>{user.name} logged in</p>
+        <button onClick={handleLogout}>logout</button>
+        {blogForm()}
+        <h2>Blog List</h2>
+        {blogs.map(blog => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
+      </div>
+    )}
+  </div>
+)
 }
 
 export default App
