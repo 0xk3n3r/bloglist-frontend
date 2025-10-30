@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
+import LoginForm from './components/LoginForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -31,8 +32,7 @@ const App = () => {
     }
   }, [])
 
-  const handleLogin = async event => {
-    event.preventDefault()
+  const handleLogin = async (username, password) => {
     
     try {
       const user = await loginService.login({ username, password })
@@ -53,6 +53,9 @@ const App = () => {
       console.log('Login failed:', error)
       setNotification('Wrong username or password')
       setNotificationType('error')
+      setTimeout(() => {
+        setNotification(null)
+      }, 5000)
     }
   }
 
@@ -93,30 +96,6 @@ const App = () => {
     setNotification(null)
   }, 5000)
   }
-
-  const LoginForm = ({ handleLogin }) => (
-    <form onSubmit={handleLogin}>
-      <div>
-        username
-        <input
-          type="text"
-          value={username}
-          onChange={({ target }) => setUsername(target.value)}
-        />
-      </div>
-      <div>
-        <label>
-          password
-          <input
-            type="password"
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-          />
-        </label>
-      </div>
-      <button type="submit">login</button>
-    </form>
-  )
 
   const blogForm = () => (
     <form onSubmit={addBlog}>
