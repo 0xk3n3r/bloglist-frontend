@@ -4,6 +4,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -134,10 +135,8 @@ const App = () => {
 
     return (
       <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>log in</button>
-        </div>
-        <div style={showWhenVisible}>
+        {!user &&
+        <Togglable buttonLabel="log in">
           <LoginForm
             username={username}
             password={password}
@@ -145,8 +144,8 @@ const App = () => {
             handlePasswordChange={({ target }) => setPassword(target.value)}
             handleLogin={() => handleLogin(username, password)}
           />
-          <button onClick={() => setLoginVisible(false)}>cancel</button>
-        </div>
+        </Togglable>
+      }
       </div>
     )
   }
@@ -163,11 +162,15 @@ const App = () => {
       <div>
         <p>{user.name} logged in</p>
         <button onClick={handleLogout}>logout</button>
-        {blogForm()}
-        <h2>Blog List</h2>
-        {blogs.map(blog => (
-          <Blog key={blog.id} blog={blog} />
-        ))}
+        <Togglable buttonLabel="ADD blog">
+          {blogForm()}
+        </Togglable>
+        <Togglable buttonLabel="SHOW blog">
+          <h2>Blog List</h2>
+          {blogs.map(blog => (
+            <Blog key={blog.id} blog={blog} />
+          ))}
+        </Togglable>
       </div>
     )}
   </div>
