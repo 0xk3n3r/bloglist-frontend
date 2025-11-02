@@ -33,7 +33,7 @@ const App = () => {
   }, [])
 
   const handleLogin = async (username, password) => {
-    
+    console.log({ username, password })
     try {
       const user = await loginService.login({ username, password })
 
@@ -132,7 +132,13 @@ const App = () => {
       <Notification message={notification} type={notificationType} />
     )}
     {user === null ? (
-      <LoginForm handleLogin={handleLogin} />
+      <LoginForm
+        username={username}
+        password={password}
+        handleUsernameChange={(e) => setUsername(e.target.value)}
+        handlePasswordChange={(e) => setPassword(e.target.value)}
+        handleLogin={() => handleLogin(username, password)}
+      />
     ) : (
       <div>
         <p>{user.name} logged in</p>
