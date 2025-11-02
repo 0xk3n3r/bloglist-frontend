@@ -17,6 +17,9 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [notificationType, setNotificationType] = useState('success')
 
+  const [loginVisible, setLoginVisible] = useState(false)
+  
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -125,6 +128,29 @@ const App = () => {
   </form>
   )
 
+  const loginForm = () => {
+    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+    const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
+    return (
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>log in</button>
+        </div>
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            password={password}
+            handleUsernameChange={({ target }) => setUsername(target.value)}
+            handlePasswordChange={({ target }) => setPassword(target.value)}
+            handleLogin={() => handleLogin(username, password)}
+          />
+          <button onClick={() => setLoginVisible(false)}>cancel</button>
+        </div>
+      </div>
+    )
+  }
+
   return (
   <div>
     <h2>blogs</h2>
@@ -132,13 +158,7 @@ const App = () => {
       <Notification message={notification} type={notificationType} />
     )}
     {user === null ? (
-      <LoginForm
-        username={username}
-        password={password}
-        handleUsernameChange={(e) => setUsername(e.target.value)}
-        handlePasswordChange={(e) => setPassword(e.target.value)}
-        handleLogin={() => handleLogin(username, password)}
-      />
+      loginForm()
     ) : (
       <div>
         <p>{user.name} logged in</p>
