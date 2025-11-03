@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
-const Blog = ({ blog, onUpdate, onDelete}) => {
+const Blog = ({ blog, user, onUpdate, onDelete}) => {
   const [currentBlog, setCurrentBlog] = useState(blog)
 
   useEffect(() => {
@@ -41,7 +41,9 @@ const Blog = ({ blog, onUpdate, onDelete}) => {
         <p>author: {blog.author}</p>
         <p>url: {blog.url} </p>
         <p>likes: {blog.likes} <button onClick={handleLike}>like</button></p>
-        <button onClick={handleDelete}>DELETE</button>
+        {blog.user?.id === user?.id && (
+          <button onClick={handleDelete}>delete</button>
+        )}
       </Togglable>
     </div>
   </div>
