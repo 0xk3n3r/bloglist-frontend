@@ -1,16 +1,21 @@
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, onUpdate}) => {
   const [currentBlog, setCurrentBlog] = useState(blog)
+
+  useEffect(() => {
+    setCurrentBlog(blog)
+  }, [blog])
 
   const handleLike = async () => {
     try {
       const updatedBlog = await blogService.uplike(blog.id)
       console.log('Updated blog:', updatedBlog)
       setCurrentBlog(updatedBlog)
+      onUpdate(updatedBlog)
     } catch (error) {
       console.error('Error liking the blog:', error)
     }

@@ -19,6 +19,14 @@ const App = () => {
   const [notification, setNotification] = useState(null)
   const [notificationType, setNotificationType] = useState('success')
 
+  const handleUpdate = (updatedBlog) => {
+    setBlogs(prevBlogs =>
+      prevBlogs.map(blog =>
+        blog.id === updatedBlog.id ? updatedBlog : blog
+      )
+    );
+  }
+
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
@@ -146,7 +154,7 @@ const App = () => {
         <Togglable buttonLabel="SHOW blog">
           <h2>Blog List</h2>
           {blogs.map(blog => (
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} />
           ))}
         </Togglable>
       </div>
