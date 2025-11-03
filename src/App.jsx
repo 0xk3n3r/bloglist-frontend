@@ -104,6 +104,17 @@ const App = () => {
   }, 5000)
   }
 
+  const handleDelete = (id) => {
+    blogService.deleteBlog(id)
+      .then(() => {
+        setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
+      })
+      .catch(error => {
+        console.error('FAIL:', error)
+        alert('FAIL')
+      })
+  }
+
   const loginForm = () => {
     return (
       <div>
@@ -156,7 +167,7 @@ const App = () => {
         <Togglable buttonLabel="SHOW blog">
           <h2>Blog List</h2>
           {sortedBlogs.map(blog => (
-            <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} />
+            <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
           ))}
         </Togglable>
       </div>

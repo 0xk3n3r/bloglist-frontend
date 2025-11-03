@@ -3,7 +3,7 @@ import blogService from '../services/blogs'
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
-const Blog = ({ blog, onUpdate}) => {
+const Blog = ({ blog, onUpdate, onDelete}) => {
   const [currentBlog, setCurrentBlog] = useState(blog)
 
   useEffect(() => {
@@ -21,6 +21,12 @@ const Blog = ({ blog, onUpdate}) => {
     }
   }
 
+  const handleDelete = () => {
+    if (window.confirm(`Delete "${blog.title}" by "${blog.author}"?`)) {
+      onDelete(blog.id)
+    }
+  }
+
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -35,6 +41,7 @@ const Blog = ({ blog, onUpdate}) => {
         <p>author: {blog.author}</p>
         <p>url: {blog.url} </p>
         <p>likes: {blog.likes} <button onClick={handleLike}>like</button></p>
+        <button onClick={handleDelete}>DELETE</button>
       </Togglable>
     </div>
   </div>

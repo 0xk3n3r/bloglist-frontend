@@ -46,4 +46,8 @@ const uplike = async (id) => {
     throw error}
 }
 
-export default { getAll, create, update, setToken, uplike}
+const deleteBlog = (id) => {
+  return axios.delete(`${baseUrl}/${id}`)
+}
+
+export default { getAll, create, update, setToken, uplike, deleteBlog}
