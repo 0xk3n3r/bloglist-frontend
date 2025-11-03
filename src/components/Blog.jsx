@@ -15,6 +15,7 @@ const Blog = ({ blog, user, onUpdate, onDelete }) => {
       console.log('Updated blog:', updatedBlog)
       setCurrentBlog(updatedBlog)
       onUpdate(updatedBlog)
+      props.onUpdate(updatedBlog)
     } catch (error) {
       console.error('Error liking the blog:', error)
     }
