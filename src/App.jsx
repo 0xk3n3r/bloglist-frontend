@@ -5,6 +5,7 @@ import loginService from './services/login'
 import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
+import BlogForm from './components/BlogForm'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -17,9 +18,6 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
   const [notificationType, setNotificationType] = useState('success')
-
-  const [loginVisible, setLoginVisible] = useState(false)
-  
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -69,12 +67,7 @@ const App = () => {
     blogService.setToken(null)
   }
 
-  const handleBlogChange = (event) => {
-    setNewBlog(event.target.value)
-  }
-
-  const addBlog = async event => {
-    event.preventDefault()
+  const addBlog = async (title, author, url) => {
     const blogObject = {
       title,
       author,
@@ -101,38 +94,7 @@ const App = () => {
   }, 5000)
   }
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-    <h3>create new</h3>
-    <div>
-      title:
-      <input
-        value={title}
-        onChange={({ target }) => setTitle(target.value)}
-      />
-    </div>
-    <div>
-      author:
-      <input
-        value={author}
-        onChange={({ target }) => setAuthor(target.value)}
-      />
-    </div>
-    <div>
-      url:
-      <input
-        value={url}
-        onChange={({ target }) => setUrl(target.value)}
-      />
-    </div>
-    <button type="submit">save</button>
-  </form>
-  )
-
   const loginForm = () => {
-    const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-    const showWhenVisible = { display: loginVisible ? '' : 'none' }
-
     return (
       <div>
         {!user &&
@@ -146,6 +108,22 @@ const App = () => {
           />
         </Togglable>
       }
+      </div>
+    )
+  }
+
+  const blogForm = () => {
+    return (
+      <div>
+        <BlogForm
+        title={title}
+        author={author}
+        url={url}
+        handleTitlenameChange={({ target }) => setTitle(target.value)}
+        handleAuthorChange={({ target }) => setAuthor(target.value)}
+        handleUrlnameChange={({ target }) => setUrl(target.value)}
+        addblog={() => addBlog(title, author, url)}
+        />
       </div>
     )
   }
