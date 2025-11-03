@@ -3,7 +3,7 @@ const LoginForm = (props) => {
   return (
     <>
       <h2>Log into BlogApp:</h2>
-      <form onSubmit={(e) => { e.preventDefault(); props.handleLogin(); }}>
+      <form onSubmit={(e) => { e.preventDefault(); props.handleLogin() }}>
         <div>
           username
           <input

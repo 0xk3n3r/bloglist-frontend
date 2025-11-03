@@ -12,10 +12,9 @@ const App = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
-  const [username, setUsername] = useState('') 
-  const [password, setPassword] = useState('') 
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
   const [notification, setNotification] = useState(null)
   const [notificationType, setNotificationType] = useState('success')
 
@@ -32,7 +31,7 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   useEffect(() => {
@@ -51,7 +50,7 @@ const App = () => {
 
       window.localStorage.setItem(
         'loggedUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -100,14 +99,14 @@ const App = () => {
       console.error('Error creating blog:', error)
     }
     setTimeout(() => {
-    setNotification(null)
-  }, 5000)
+      setNotification(null)
+    }, 5000)
   }
 
   const handleDelete = (id) => {
     blogService.deleteBlog(id)
       .then(() => {
-        setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id));
+        setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id))
       })
       .catch(error => {
         console.error('FAIL:', error)
@@ -128,7 +127,7 @@ const App = () => {
             handleLogin={() => handleLogin(username, password)}
           />
         </Togglable>
-      }
+        }
       </div>
     )
   }
@@ -137,43 +136,43 @@ const App = () => {
     return (
       <div>
         <BlogForm
-        title={title}
-        author={author}
-        url={url}
-        handleTitlenameChange={({ target }) => setTitle(target.value)}
-        handleAuthorChange={({ target }) => setAuthor(target.value)}
-        handleUrlnameChange={({ target }) => setUrl(target.value)}
-        addblog={() => addBlog(title, author, url)}
+          title={title}
+          author={author}
+          url={url}
+          handleTitlenameChange={({ target }) => setTitle(target.value)}
+          handleAuthorChange={({ target }) => setAuthor(target.value)}
+          handleUrlnameChange={({ target }) => setUrl(target.value)}
+          addblog={() => addBlog(title, author, url)}
         />
       </div>
     )
   }
 
   return (
-  <div>
-    <h2>blogs</h2>
-    {notification && (
-      <Notification message={notification} type={notificationType} />
-    )}
-    {user === null ? (
-      loginForm()
-    ) : (
-      <div>
-        <p>{user.name} logged in</p>
-        <button onClick={handleLogout}>logout</button>
-        <Togglable buttonLabel="ADD blog">
-          {blogForm()}
-        </Togglable>
-        <Togglable buttonLabel="SHOW blog">
-          <h2>Blog List</h2>
-          {sortedBlogs.map(blog => (
-            <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
-          ))}
-        </Togglable>
-      </div>
-    )}
-  </div>
-)
+    <div>
+      <h2>blogs</h2>
+      {notification && (
+        <Notification message={notification} type={notificationType} />
+      )}
+      {user === null ? (
+        loginForm()
+      ) : (
+        <div>
+          <p>{user.name} logged in</p>
+          <button onClick={handleLogout}>logout</button>
+          <Togglable buttonLabel="ADD blog">
+            {blogForm()}
+          </Togglable>
+          <Togglable buttonLabel="SHOW blog">
+            <h2>Blog List</h2>
+            {sortedBlogs.map(blog => (
+              <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
+            ))}
+          </Togglable>
+        </div>
+      )}
+    </div>
+  )
 }
 
 export default App

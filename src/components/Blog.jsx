@@ -1,9 +1,8 @@
 import Togglable from './Togglable'
 import blogService from '../services/blogs'
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 
-const Blog = ({ blog, user, onUpdate, onDelete}) => {
+const Blog = ({ blog, user, onUpdate, onDelete }) => {
   const [currentBlog, setCurrentBlog] = useState(blog)
 
   useEffect(() => {
@@ -36,7 +35,7 @@ const Blog = ({ blog, user, onUpdate, onDelete}) => {
   }
   return (<div>
     <div style={blogStyle}>
-    {blog.title} 
+      {blog.title}
       <Togglable buttonLabel="view">
         <p>author: {blog.author}</p>
         <p>url: {blog.url} </p>
@@ -47,6 +46,6 @@ const Blog = ({ blog, user, onUpdate, onDelete}) => {
       </Togglable>
     </div>
   </div>
-)}
+  )}
 
 export default Blog

@@ -31,8 +31,8 @@ const uplike = async (id) => {
   const blog = response.data
   try {
     const config = {
-    headers: { Authorization: token }
-  }
+      headers: { Authorization: token }
+    }
     const newObject = {
       title: blog.title,
       author: blog.author,
@@ -50,4 +50,4 @@ const deleteBlog = (id) => {
   return axios.delete(`${baseUrl}/${id}`)
 }
 
-export default { getAll, create, update, setToken, uplike, deleteBlog}
+export default { getAll, create, update, setToken, uplike, deleteBlog }
