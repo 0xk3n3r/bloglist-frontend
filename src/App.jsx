@@ -24,8 +24,10 @@ const App = () => {
       prevBlogs.map(blog =>
         blog.id === updatedBlog.id ? updatedBlog : blog
       )
-    );
+    )
   }
+
+  const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -153,7 +155,7 @@ const App = () => {
         </Togglable>
         <Togglable buttonLabel="SHOW blog">
           <h2>Blog List</h2>
-          {blogs.map(blog => (
+          {sortedBlogs.map(blog => (
             <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} />
           ))}
         </Togglable>
