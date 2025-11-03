@@ -1,11 +1,16 @@
 const BlogForm = (props) => {
 
   return (
-    <form onSubmit={(e) => { e.preventDefault(); props.addblog() }}>
+    <form onSubmit={(e) => {
+        e.preventDefault()
+        props.addblog({ title: props.title, author: props.author, url: props.url });
+    }}>
+
       <h3>create new</h3>
       <div>
             title:
         <input
+          placeholder="Title"
           value={props.title}
           onChange={props.handleTitlenameChange}
           name="title"
@@ -15,6 +20,7 @@ const BlogForm = (props) => {
       <div>
             author:
         <input
+          placeholder="Author"
           value={props.author}
           onChange={props.handleAuthorChange}
           name="author"
@@ -24,6 +30,7 @@ const BlogForm = (props) => {
       <div>
             url:
         <input
+          placeholder="URL"
           value={props.url}
           onChange={props.handleUrlnameChange}
           name="url"
