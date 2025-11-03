@@ -54,20 +54,20 @@ test('calls the event handler twice when the like button is clicked twice', asyn
   }
   const user = { id: 'user1' }
 
-render(<Blog blog={blog} user={user} onUpdate={mockOnUpdate} onDelete={() => {}} />)
-blogService.uplike = vi.fn().mockResolvedValue({
-  ...blog,
-  likes: blog.likes + 1,
-  id: blog.id
-})
-const userEventInstance = userEvent.setup()
-const toggleButton = screen.getByText('view')
-await userEventInstance.click(toggleButton)
+  render(<Blog blog={blog} user={user} onUpdate={mockOnUpdate} onDelete={() => {}} />)
+  blogService.uplike = vi.fn().mockResolvedValue({
+    ...blog,
+    likes: blog.likes + 1,
+    id: blog.id
+  })
+  const userEventInstance = userEvent.setup()
+  const toggleButton = screen.getByText('view')
+  await userEventInstance.click(toggleButton)
 
-const likeButton = screen.getByText('like')
+  const likeButton = screen.getByText('like')
 
-await userEventInstance.click(likeButton)
-await userEventInstance.click(likeButton)
+  await userEventInstance.click(likeButton)
+  await userEventInstance.click(likeButton)
 
-expect(mockOnUpdate).toHaveBeenCalledWith(expect.objectContaining({ id: blog.id }))
+  expect(mockOnUpdate).toHaveBeenCalledWith(expect.objectContaining({ id: blog.id }))
 })

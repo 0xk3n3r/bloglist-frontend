@@ -2,8 +2,8 @@ const BlogForm = (props) => {
 
   return (
     <form onSubmit={(e) => {
-        e.preventDefault()
-        props.addblog({ title: props.title, author: props.author, url: props.url });
+      e.preventDefault()
+      props.addblog({ title: props.title, author: props.author, url: props.url })
     }}>
 
       <h3>create new</h3>

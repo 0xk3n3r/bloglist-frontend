@@ -30,7 +30,7 @@ describe('<Togglable />', () => {
   })
 })
 
- /*
+/*
 describe('<Togglable />', () => {
   test('toggled content can be closed', async () => {
     const user = userEvent.setup()
