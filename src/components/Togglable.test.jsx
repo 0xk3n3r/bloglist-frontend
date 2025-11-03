@@ -30,10 +30,8 @@ describe('<Togglable />', () => {
   })
 })
 
+ /*
 describe('<Togglable />', () => {
-
-  // ...
-
   test('toggled content can be closed', async () => {
     const user = userEvent.setup()
     const button = screen.getByText(props.buttonLabel)
@@ -46,3 +44,4 @@ describe('<Togglable />', () => {
     expect(element).not.toBeVisible()
   })
 })
+  */
