@@ -34,12 +34,12 @@ const Blog = ({ blog, user, onUpdate, onDelete }) => {
     marginBottom: 5
   }
   return (<div>
-    <div style={blogStyle}>
-      {blog.title}
+    <div className="blog" style={blogStyle}>
+      <div className="blog"> {blog.title} </div>
       <Togglable buttonLabel="view">
-        <p>author: {blog.author}</p>
-        <p>url: {blog.url} </p>
-        <p>likes: {blog.likes} <button onClick={handleLike}>like</button></p>
+        <p className="blog-author">author: {blog.author}</p>
+        <p className="blog-url">url: {blog.url} </p>
+        <p className="blog-likes">likes: {blog.likes} <button onClick={handleLike}>like</button></p>
         {blog.user?.id === user?.id && (
           <button onClick={handleDelete}>delete</button>
         )}
