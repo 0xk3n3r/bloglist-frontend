@@ -6,6 +6,8 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
+import { useDispatch } from 'react-redux'
+import { showNotification } from './store/notificationSlice'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
@@ -15,8 +17,11 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [notification, setNotification] = useState(null)
-  const [notificationType, setNotificationType] = useState('success')
+  const dispatch = useDispatch()
+
+  const triggerNotification = (message, type) => {
+    dispatch(showNotification({ message, type }))
+  }
 
   const handleUpdate = (updatedBlog) => {
     setBlogs(prevBlogs =>
@@ -55,18 +60,10 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      setNotification(`Welcome ${user.name}`)
-      setNotificationType('success')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      triggerNotification(`Welcome ${user.name}`, 'success')
     } catch (error) {
       console.log('Login failed:', error)
-      setNotification('Wrong username or password')
-      setNotificationType('error')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      triggerNotification('Wrong username or password', 'error')
     }
   }
 
@@ -89,18 +86,12 @@ const App = () => {
       setTitle('')
       setAuthor('')
       setUrl('')
-
-      setNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`)
-      setNotificationType('success')
-      setTimeout(() => {
-        setNotification(null)
-      }, 5000)
+      
+      triggerNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, 'success')
     } catch (error) {
       console.error('Error creating blog:', error)
+      triggerNotification('Error creating blog', 'error')
     }
-    setTimeout(() => {
-      setNotification(null)
-    }, 5000)
   }
 
   const handleDelete = (id) => {
@@ -151,9 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>blogs</h2>
-      {notification && (
-        <Notification message={notification} type={notificationType} />
-      )}
+      <Notification />
       {user === null ? (
         loginForm()
       ) : (
