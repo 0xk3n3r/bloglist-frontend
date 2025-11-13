@@ -38,6 +38,11 @@ const App = () => {
   }, [dispatch])
 
   useEffect(() => {
+    console.log('Calling addBlog directly')
+    addBlog()
+  }, [])
+
+  useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
@@ -73,12 +78,13 @@ const App = () => {
 
   const addBlog = async () => {
     try {
-      const newBlog = await dispatch(createBlog({ title, author, url }))
-      triggerNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, 'success')
+      const newBlog = dispatch(createBlog({ title, author, url }))
+      console.log('New blog:', newBlog)
+      triggerNotification(`a new blog "${newBlog.title}" by ${newBlog.author} added`, 'success')
       setTitle('')
       setAuthor('')
       setUrl('')
-    } catch (error) {
+    } catch (AxiosError) {
       console.error('Error creating blog:', error)
       triggerNotification('Error creating blog', 'error')
     }
@@ -122,7 +128,7 @@ const App = () => {
           handleTitlenameChange={({ target }) => setTitle(target.value)}
           handleAuthorChange={({ target }) => setAuthor(target.value)}
           handleUrlnameChange={({ target }) => setUrl(target.value)}
-          addblog={() => addBlog(title, author, url)}
+          addblog={addBlog}
         />
       </div>
     )
