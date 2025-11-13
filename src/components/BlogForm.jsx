@@ -1,44 +1,57 @@
-const BlogForm = (props) => {
+import Blog from "./Blog"
+import blogService from '../services/blogs'
+import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { initializeBlogs, createBlog } from '../store/blogsSlice'
+
+const BlogForm = () => {
+
+  const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
+  const user = useSelector(state => state.user)
+
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+
+  useEffect(() => {
+    dispatch(initializeBlogs())
+  }, [dispatch])
+
+  const handleCreate = async (e) => {
+    e.preventDefault()
+    const newBlog = { title, author, url }
+    try {
+      dispatch(createBlog(newBlog))
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch (error) {
+      alert('Error creating blog')
+    }
+  }
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault()
-      props.addblog({ title: props.title, author: props.author, url: props.url })
-    }}>
-
-      <h3>create new</h3>
-      <div>
-            title:
+    <div>
+      <form onSubmit={handleCreate}>
         <input
           placeholder="Title"
-          value={props.title}
-          onChange={props.handleTitlenameChange}
-          name="title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
-      </div>
-
-      <div>
-            author:
         <input
           placeholder="Author"
-          value={props.author}
-          onChange={props.handleAuthorChange}
-          name="author"
+          value={author}
+          onChange={(e) => setAuthor(e.target.value)}
         />
-      </div>
-
-      <div>
-            url:
         <input
           placeholder="URL"
-          value={props.url}
-          onChange={props.handleUrlnameChange}
-          name="url"
+          value={url}
+          onChange={(e) => setUrl(e.target.value)}
         />
-      </div>
-
-      <button type="submit">save</button>
-    </form>
+        <button type="submit">Create</button>
+      </form>
+    </div>
   )
 }
 

@@ -6,11 +6,11 @@ import Notification from './components/Notification'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { showNotification } from './store/notificationSlice'
+import { initializeBlogs, createBlog, uplike, deleteBlog } from './store/blogsSlice'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -30,14 +30,12 @@ const App = () => {
       )
     )
   }
-
+  const blogs = useSelector(state => state.blogs)
   const sortedBlogs = [...blogs].sort((a, b) => b.likes - a.likes)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -73,36 +71,27 @@ const App = () => {
     blogService.setToken(null)
   }
 
-  const addBlog = async (title, author, url) => {
-    const blogObject = {
-      title,
-      author,
-      url,
-    }
-
+  const addBlog = async () => {
     try {
-      const returnedBlog = await blogService.create(blogObject)
-      setBlogs(blogs.concat(returnedBlog))
+      const newBlog = await dispatch(createBlog({ title, author, url }))
+      triggerNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, 'success')
       setTitle('')
       setAuthor('')
       setUrl('')
-      
-      triggerNotification(`a new blog "${returnedBlog.title}" by ${returnedBlog.author} added`, 'success')
     } catch (error) {
       console.error('Error creating blog:', error)
       triggerNotification('Error creating blog', 'error')
     }
   }
 
-  const handleDelete = (id) => {
-    blogService.deleteBlog(id)
-      .then(() => {
-        setBlogs(prevBlogs => prevBlogs.filter(blog => blog.id !== id))
-      })
-      .catch(error => {
-        console.error('FAIL:', error)
-        alert('FAIL')
-      })
+  const handleDelete = (id, title, author) => {
+  if (window.confirm(`Delete "${title}" by "${author}"?`)) {
+    dispatch(deleteBlog(id))
+  }
+}
+
+  const handleLike = (id) => {
+    dispatch(uplike(id))
   }
 
   const loginForm = () => {
@@ -155,7 +144,13 @@ const App = () => {
           <Togglable buttonLabel="SHOW blog">
             <h2>Blog List</h2>
             {sortedBlogs.map(blog => (
-              <Blog key={blog.id} blog={blog} onUpdate={handleUpdate} onDelete={handleDelete}/>
+              <Blog
+              key={blog.id}
+              blog={blog}
+              user={user}
+              handleLike={() => handleLike(blog.id)}
+              handleDelete={() => handleDelete(blog.id, blog.title, blog.author)}
+            />
             ))}
           </Togglable>
         </div>
