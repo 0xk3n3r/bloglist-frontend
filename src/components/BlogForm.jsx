@@ -3,16 +3,17 @@ import blogService from '../services/blogs'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, createBlog } from '../store/blogsSlice'
+import { showNotification } from '../store/notificationSlice'
 
 const BlogForm = () => {
-
   const dispatch = useDispatch()
-  const blogs = useSelector(state => state.blogs)
-  const user = useSelector(state => state.user)
-
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
+
+  const triggerNotification = (message, type) => {
+      dispatch(showNotification({ message, type }))
+    }
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -23,6 +24,7 @@ const BlogForm = () => {
     const newBlog = { title, author, url }
     try {
       dispatch(createBlog(newBlog))
+      triggerNotification(`a new blog "${title}" by ${author} added`, 'success')
       setTitle('')
       setAuthor('')
       setUrl('')

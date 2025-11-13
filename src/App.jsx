@@ -11,9 +11,6 @@ import { showNotification } from './store/notificationSlice'
 import { initializeBlogs, createBlog, uplike, deleteBlog } from './store/blogsSlice'
 
 const App = () => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -36,11 +33,6 @@ const App = () => {
   useEffect(() => {
     dispatch(initializeBlogs())
   }, [dispatch])
-
-  useEffect(() => {
-    console.log('Calling addBlog directly')
-    addBlog()
-  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedUser')
@@ -76,30 +68,6 @@ const App = () => {
     blogService.setToken(null)
   }
 
-  const addBlog = async () => {
-    try {
-      const newBlog = dispatch(createBlog({ title, author, url }))
-      console.log('New blog:', newBlog)
-      triggerNotification(`a new blog "${newBlog.title}" by ${newBlog.author} added`, 'success')
-      setTitle('')
-      setAuthor('')
-      setUrl('')
-    } catch (AxiosError) {
-      console.error('Error creating blog:', error)
-      triggerNotification('Error creating blog', 'error')
-    }
-  }
-
-  const handleDelete = (id, title, author) => {
-  if (window.confirm(`Delete "${title}" by "${author}"?`)) {
-    dispatch(deleteBlog(id))
-  }
-}
-
-  const handleLike = (id) => {
-    dispatch(uplike(id))
-  }
-
   const loginForm = () => {
     return (
       <div>
@@ -118,22 +86,6 @@ const App = () => {
     )
   }
 
-  const blogForm = () => {
-    return (
-      <div>
-        <BlogForm
-          title={title}
-          author={author}
-          url={url}
-          handleTitlenameChange={({ target }) => setTitle(target.value)}
-          handleAuthorChange={({ target }) => setAuthor(target.value)}
-          handleUrlnameChange={({ target }) => setUrl(target.value)}
-          addblog={addBlog}
-        />
-      </div>
-    )
-  }
-
   return (
     <div>
       <h2>blogs</h2>
@@ -145,7 +97,7 @@ const App = () => {
           <p>{user.name} logged in</p>
           <button onClick={handleLogout}>logout</button>
           <Togglable buttonLabel="ADD blog">
-            {blogForm()}
+            <BlogForm/>
           </Togglable>
           <Togglable buttonLabel="SHOW blog">
             <h2>Blog List</h2>
@@ -154,8 +106,8 @@ const App = () => {
               key={blog.id}
               blog={blog}
               user={user}
-              handleLike={() => handleLike(blog.id)}
-              handleDelete={() => handleDelete(blog.id, blog.title, blog.author)}
+              handleLike={() => Blog.handleLike(blog.id)}
+              handleDelete={() => Blog.handleDelete(blog.id, blog.title, blog.author)}
             />
             ))}
           </Togglable>
