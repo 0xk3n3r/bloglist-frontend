@@ -6,10 +6,11 @@ import { Link } from 'react-router-dom'
 const UserList = () => {
   const dispatch = useDispatch()
   const [users, setUsers] = useState([])
+
   useEffect(() => {
     dispatch(initializeUsers())
   }, [dispatch])
-  initializeUsers()
+
   console.log('users:', users)
   return (
     <div>

@@ -1,20 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice} from '@reduxjs/toolkit'
 import usersService from '../services/users'
-
-export const initializeUsers = createAsyncThunk(
-  'users/initialize',
-  async (_, thunkAPI) => {
-    try {
-      const users = await usersService.getAll()
-      console.log('Fetched users:', users)
-      return users
-    } catch (error) {
-      console.error('Failed to fetch users:', error)
-      return thunkAPI.rejectWithValue(error.message)
-    }
-  }
-)
-
 
 const userSlice = createSlice({
   name: 'users',
@@ -26,13 +11,14 @@ const userSlice = createSlice({
     clearUser() {
       return []
     }
-  },
-  extraReducers: (builder) => {
-    builder.addCase(initializeUsers.fulfilled, (state, action) => {
-      return action.payload
-    })
   }
 })
+
+export const initializeUsers = () => async (dispatch) => {
+  const users = await usersService.getAll()
+  console.log('Fetched users:', users)
+  dispatch(setUser(users))
+}
 
 export const { setUser, clearUser } = userSlice.actions
 export default userSlice.reducer
