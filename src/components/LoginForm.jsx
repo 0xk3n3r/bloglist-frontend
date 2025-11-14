@@ -1,28 +1,96 @@
+import React, { useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
+import { login } from '../services/login'
+import { setUser } from '../store/userSlice'
+import blogService from '../services/blogs'
+import { showNotification } from '../store/notificationSlice'
 
-const LoginForm = (props) => {
+export const handleLogin = async (
+  username,
+  password,
+  dispatch,
+  triggerNotification,
+  setUserState,
+  setUsername,
+  setPassword
+) => {
+  try {
+    const userData = await login({ username, password })
+    window.localStorage.setItem('loggedUser', JSON.stringify(userData))
+    dispatch(setUser(userData))
+    setUserState(userData)
+    setUsername('')
+    setPassword('')
+    triggerNotification(`Welcome ${userData.name}`, 'success')
+  } catch (error) {
+    console.log('Login failed:', error)
+    triggerNotification('Wrong username or password', 'error')
+  }
+}
+
+export const handleLogout = (setUserState) => {
+  window.localStorage.removeItem('loggedUser')
+  setUserState(null)
+  blogService.setToken(null)
+}
+
+const LoginForm = () => {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
+  const dispatch = useDispatch()
+
+  const triggerNotification = (message, type) => {
+        dispatch(showNotification({ message, type }))
+      }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    handleLogin(
+      username,
+      password,
+      dispatch,
+      triggerNotification,
+      setUser,
+      setUsername,
+      setPassword
+    )
+  }
+
+  const handleLogoutClick = () => {
+    handleLogout(setUser)
+  }
+
   return (
     <>
       <h2>Log into BlogApp:</h2>
-      <form onSubmit={(e) => { e.preventDefault(); props.handleLogin() }}>
+      {!user ? (
+        <form onSubmit={handleSubmit}>
+          <div>
+            username
+            <input
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              name="username"
+            />
+          </div>
+          <div>
+            password
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              name="password"
+            />
+          </div>
+          <button type="submit">login</button>
+        </form>
+      ) : (
         <div>
-          username
-          <input
-            value={props.username}
-            onChange={props.handleUsernameChange}
-            name="username"
-          />
+          <p>Welcome, {user.name}!</p>
+          <button onClick={handleLogoutClick}>Logout</button>
         </div>
-        <div>
-          password
-          <input
-            type="password"
-            value={props.password}
-            onChange={props.handlePasswordChange}
-            name="password"
-          />
-        </div>
-        <button type="submit">login</button>
-      </form>
+      )}
     </>
   )
 }
