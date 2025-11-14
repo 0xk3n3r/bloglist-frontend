@@ -9,6 +9,24 @@ import { showNotification } from './store/notificationSlice'
 import { initializeBlogs, createBlog, uplike, deleteBlog } from './store/blogsSlice'
 import { handleLogin, handleLogout} from './components/LoginForm'
 import blogService from './services/blogs'
+import {
+  BrowserRouter as Router,
+  Routes, Route, Link, useParams, useNavigate
+} from 'react-router-dom'
+import UserList from './components/UserList'
+import UserDetails from './components/UserDetails'
+
+const Menu = () => {
+  const padding = {
+    paddingRight: 5
+  }
+  return (
+    <div>
+      <a href='#' style={padding}>blog</a>
+      <a href='#' style={padding}>users</a>
+    </div>
+  )
+}
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -69,34 +87,49 @@ const App = () => {
     </div>
   )
 
+  const padding = {
+    padding: 5
+  }
+
   return (
-    <div>
-      <h2>blogs</h2>
-      <Notification />
-      {user === null ? (
-        loginForm()
-      ) : (
-        <div>
-          <p>{user.name} logged in</p>
-          <button onClick={() => handleLogout(setUser)}>logout</button>
-          <Togglable buttonLabel="ADD blog">
-            <BlogForm />
-          </Togglable>
-          <Togglable buttonLabel="SHOW blog">
-            <h2>Blog List</h2>
-            {sortedBlogs.map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                user={user}
-                handleLike={() => Blog.handleLike(dispatch, blog.id)}
-                handleDelete={() => Blog.handleDelete(dispatch, blog, user)}
-              />
-            ))}
-          </Togglable>
-        </div>
-      )}
-    </div>
+    <Router>
+      
+      <div>
+        <h2>blogs</h2>
+        <Link style={padding} to="/">home</Link>
+        <Link style={padding} to="/users">users</Link>
+        <Notification />
+        {user === null ? (
+          loginForm()
+        ) : (
+          <div>
+            <p>{user.name} logged in</p>
+            <button onClick={() => handleLogout(setUser)}>logout</button>
+            <Togglable buttonLabel="ADD blog">
+              <BlogForm />
+            </Togglable>
+            <Togglable buttonLabel="SHOW blog">
+              <h2>Blog List</h2>
+              {sortedBlogs.map((blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  user={user}
+                  handleLike={() => Blog.handleLike(dispatch, blog.id)}
+                  handleDelete={() => Blog.handleDelete(dispatch, blog, user)}
+                />
+              ))}
+            </Togglable>
+          </div>
+        )}
+      </div>
+
+      <Routes>
+        <Route path="/users" element={<UserList />} />
+        <Route path="/users/:id" element={<UserDetails />} />
+        <Route path="/" element={<Menu />} />
+      </Routes>
+      </Router>
   )
 }
 

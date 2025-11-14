@@ -1,17 +1,29 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import usersService from '../services/users'
 
-const initialState = null
+export const initializeUsers = createAsyncThunk(
+  'users/initialize',
+  async () => {
+    const users = await usersService.getAll()
+    return users
+  }
+)
 
 const userSlice = createSlice({
   name: 'user',
-  initialState,
+  initialState: [],
   reducers: {
     setUser(state, action) {
       return action.payload
     },
     clearUser() {
       return null
-    }
+    },
+    extraReducers: (builder) => {
+    builder.addCase(initializeUsers.fulfilled, (state, action) => {
+      return action.payload
+    })
+  }
   }
 })
 
