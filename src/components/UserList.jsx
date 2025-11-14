@@ -1,21 +1,16 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeUsers } from '../store/userSlice'
 import { Link } from 'react-router-dom'
 
 const UserList = () => {
   const dispatch = useDispatch()
-  const users = useSelector(state => state.users)
-
+  const [users, setUsers] = useState([])
   useEffect(() => {
     dispatch(initializeUsers())
   }, [dispatch])
-
-  if (!users) {
-    return <div>Loading...</div>
-  }
-
-  const usersArray = Array.isArray(users) ? users : []
+  initializeUsers()
+  console.log('users:', users)
   return (
     <div>
       <h2>Users</h2>
@@ -28,13 +23,13 @@ const UserList = () => {
           </tr>
         </thead>
         <tbody>
-          {users && users.map(user => (
+          {users.map(user => (
             <tr key={user.id}>
               <td>
                 <Link to={`/users/${user.id}`}>{user.username}</Link>
               </td>
               <td>{user.name}</td>
-              <td>{user.blogs.length}</td>
+              <td>{user.blogs ? user.blogs.length : 0}</td>
             </tr>
           ))}
         </tbody>

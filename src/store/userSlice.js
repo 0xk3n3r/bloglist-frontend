@@ -3,27 +3,34 @@ import usersService from '../services/users'
 
 export const initializeUsers = createAsyncThunk(
   'users/initialize',
-  async () => {
-    const users = await usersService.getAll()
-    return users
+  async (_, thunkAPI) => {
+    try {
+      const users = await usersService.getAll()
+      console.log('Fetched users:', users)
+      return users
+    } catch (error) {
+      console.error('Failed to fetch users:', error)
+      return thunkAPI.rejectWithValue(error.message)
+    }
   }
 )
 
+
 const userSlice = createSlice({
-  name: 'user',
+  name: 'users',
   initialState: [],
   reducers: {
     setUser(state, action) {
       return action.payload
     },
     clearUser() {
-      return null
-    },
-    extraReducers: (builder) => {
+      return []
+    }
+  },
+  extraReducers: (builder) => {
     builder.addCase(initializeUsers.fulfilled, (state, action) => {
       return action.payload
     })
-  }
   }
 })
 
