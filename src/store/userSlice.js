@@ -1,9 +1,11 @@
 import { createSlice} from '@reduxjs/toolkit'
 import usersService from '../services/users'
 
+const initialState = []
+
 const userSlice = createSlice({
   name: 'users',
-  initialState: [],
+  initialState,
   reducers: {
     setUser(state, action) {
       return action.payload
