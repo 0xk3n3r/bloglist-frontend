@@ -53,6 +53,7 @@ const handleDelete = () => {
           likes: {blog.likes}
           <button onClick={handleLike}>like</button>
         </p>
+        <p data-testid="blog-comments">comments: {blog.comments}</p>
         {blog.user?.id === user?.id && (
           <button onClick={handleDelete}>delete</button>
         )}
