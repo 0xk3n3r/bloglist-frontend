@@ -49,15 +49,16 @@ const handleDelete = () => {
       <Togglable buttonLabel="view">
         <p data-testid="blog-author">author: {blog.author}</p>
         <p data-testid="blog-url">url: {blog.url}</p>
+        <p data-testid="blog-user">user: {blog.user.name}</p>
         <p data-testid="blog-likes">
           likes: {blog.likes}
           <button onClick={handleLike}>like</button>
         </p>
-        <p data-testid="blog-comments">comments:{blog.comments.map(comment => (
-            <tr key={comment.id}>
-              <td>{comment}</td>
-            </tr>
-          ))}</p>
+        <div data-testid="blog-comments">
+          <h3>comments:</h3>
+          {blog.comments.map(comment => (
+              <li key={comment.id}>{comment.comment}</li>))}
+        </div>
         {blog.user?.id === user?.id && (
           <button onClick={handleDelete}>delete</button>
         )}
