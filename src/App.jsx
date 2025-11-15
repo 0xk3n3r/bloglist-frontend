@@ -32,6 +32,7 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  
   const dispatch = useDispatch()
 
   const triggerNotification = (message, type) => {
@@ -111,13 +112,7 @@ const App = () => {
             <Togglable buttonLabel="SHOW blog">
               <h2>Blog List</h2>
               {sortedBlogs.map((blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  user={user}
-                  handleLike={() => Blog.handleLike(dispatch, blog.id)}
-                  handleDelete={() => Blog.handleDelete(dispatch, blog, user)}
-                />
+                <Blog />
               ))}
             </Togglable>
           </div>
@@ -127,6 +122,7 @@ const App = () => {
       <Routes>
         <Route path="/users" element={<UserList />} />
         <Route path="/users/:id" element={<UserDetails />} />
+        <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/" element={<Menu />} />
       </Routes>
       </Router>
