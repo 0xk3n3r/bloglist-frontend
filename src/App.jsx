@@ -22,8 +22,7 @@ const Menu = () => {
   }
   return (
     <div>
-      <a href='#' style={padding}>blog</a>
-      <a href='#' style={padding}>users</a>
+      Welcome 2025
     </div>
   )
 }
@@ -98,7 +97,6 @@ const App = () => {
       <div>
         <h2>blogs</h2>
         <Link style={padding} to="/">home</Link>
-        <Link style={padding} to="/users">users</Link>
         <Notification />
         {user === null ? (
           loginForm()
@@ -106,14 +104,10 @@ const App = () => {
           <div>
             <p>{user.name} logged in</p>
             <button onClick={() => handleLogout(setUser)}>logout</button>
+            <Link style={padding} to="/users">users</Link>
+            <Link style={padding} to="/blogs">blogs</Link>
             <Togglable buttonLabel="ADD blog">
               <BlogForm />
-            </Togglable>
-            <Togglable buttonLabel="SHOW blog">
-              <h2>Blog List</h2>
-              {sortedBlogs.map((blog) => (
-                <Blog />
-              ))}
             </Togglable>
           </div>
         )}
@@ -122,6 +116,7 @@ const App = () => {
       <Routes>
         <Route path="/users" element={<UserList />} />
         <Route path="/users/:id" element={<UserDetails />} />
+        <Route path="/blogs" element={<BlogForm />} />
         <Route path="/blogs/:id" element={<Blog />} />
         <Route path="/" element={<Menu />} />
       </Routes>
