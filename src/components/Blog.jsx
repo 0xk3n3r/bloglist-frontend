@@ -63,7 +63,7 @@ const handleDelete = () => {
         {blog.user?.id === user?.id && (
           <button onClick={handleDelete}>delete</button>
         )}
-        <CommentForm />
+        <CommentForm blogId={id}/>
       </Togglable>
     </div>
   )
