@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { uplike, deleteBlog } from '../store/blogsSlice'
 import { useParams } from 'react-router-dom'
 import { initializeBlogs, createBlog } from '../store/blogsSlice'
+import CommentForm from "./CommentForm"
 
 const Blog = () => {
   const { id } = useParams()
@@ -62,6 +63,7 @@ const handleDelete = () => {
         {blog.user?.id === user?.id && (
           <button onClick={handleDelete}>delete</button>
         )}
+        <CommentForm />
       </Togglable>
     </div>
   )

@@ -46,8 +46,22 @@ const uplike = async (id) => {
     throw error}
 }
 
+const addComment = async (id, comment) => {
+  console.log('services: comment',id, comment)
+  const config = {
+    headers: { Authorization: token }
+  }
+  const response = await axios.post(
+    `${baseUrl}/${id}/comments`,
+    comment,
+    config
+  )
+  return response.data
+}
+
+
 const deleteBlog = (id) => {
   return axios.delete(`${baseUrl}/${id}`)
 }
 
-export default { getAll, create, update, setToken, uplike, deleteBlog }
+export default { getAll, create, update, setToken, uplike, deleteBlog, addComment }

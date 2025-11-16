@@ -20,11 +20,24 @@ const blogsSlice = createSlice({
     removeBlog(state, action) {
       const id = action.payload
       return state.filter(blog => blog.id !== id)
+    },
+    addComment(state, action) {
+      console.log('action.payload', action.payload)
+      const { blogId, comment } = action.payload || {}
+      if (!blogId || !comment) {
+        console.error('Invalid payload:', action.payload)
+        return
+      }
+      const blog = state.find(b => b.id === blogId)
+      if (blog) {
+        if (!blog.comments) blog.comments = []
+        blog.comments.push(comment)
+      }
     }
   }
 })
 
-export const { setBlogs, appendBlog, updateBlog, removeBlog } = blogsSlice.actions
+export const { setBlogs, appendBlog, updateBlog, removeBlog, addComment } = blogsSlice.actions
 
 export const initializeBlogs = () => async (dispatch) => {
   const blogs = await blogService.getAll()
@@ -46,6 +59,20 @@ export const uplike = (id) => async (dispatch, getState) => {
 export const deleteBlog = (id) => async (dispatch) => {
   await blogService.deleteBlog(id)
   dispatch(removeBlog(id))
+}
+
+export const addCommentToBlog = (blogId, commentContent) => async (dispatch, getState) => {
+  const token = getState().user?.token
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+  try {
+    const response = await blogService.addComment(blogId, { comment: commentContent }, config)
+    console.log('comment:', response)
+    dispatch(addComment({ blogId, comment: response }))
+  } catch (error) {
+    console.error('Adding comment failed:', error)
+  }
 }
 
 export default blogsSlice.reducer
