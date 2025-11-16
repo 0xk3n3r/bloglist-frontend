@@ -4,6 +4,7 @@ import { login } from '../services/login'
 import { setUser } from '../store/userSlice'
 import blogService from '../services/blogs'
 import { showNotification } from '../store/notificationSlice'
+import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap'
 
 export const handleLogin = async (
   username,
@@ -66,24 +67,28 @@ const LoginForm = () => {
       <h2>Log into BlogApp:</h2>
       {!user ? (
         <form onSubmit={handleSubmit}>
-          <div>
-            username
-            <input
+          <Form.Group>
+            <Form.Label>username:</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              name="username"
             />
-          </div>
-          <div>
-            password
-            <input
-              type="password"
+          </Form.Group>
+
+          <Form.Group>
+            <Form.Label>password:</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              name="password"
             />
-          </div>
-          <button type="submit">login</button>
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            login
+          </Button>
         </form>
       ) : (
         <div>

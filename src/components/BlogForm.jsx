@@ -8,6 +8,7 @@ import {
   BrowserRouter as Router,
   Routes, Route, Link, useParams, useNavigate
 } from 'react-router-dom'
+import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap'
 
 const BlogForm = () => {
   const dispatch = useDispatch()
@@ -63,14 +64,7 @@ const BlogForm = () => {
       </form>
 
       <h2>Blogs</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Blogname</th>
-            <th>Name</th>
-            <th>Blogs</th>
-          </tr>
-        </thead>
+      <table striped>
         <tbody>
           {blogs.map(blog => (
             <tr key={blog.id}>

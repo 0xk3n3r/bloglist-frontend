@@ -15,6 +15,8 @@ import {
 } from 'react-router-dom'
 import UserList from './components/UserList'
 import UserDetails from './components/UserDetails'
+import { Table, Form, Button, Alert, Navbar, Nav } from 'react-bootstrap'
+
 
 const Menu = () => {
   const padding = {
@@ -63,6 +65,7 @@ const App = () => {
 
   const loginForm = () => (
     <div>
+      <h2>Welcome</h2>
       {!user && (
         <Togglable buttonLabel="log in">
           <LoginForm
@@ -94,7 +97,7 @@ const App = () => {
   return (
     <Router>
       
-      <div>
+      <div className="container">
         <h2>blogs</h2>
         <Link style={padding} to="/">home</Link>
         <Notification />
