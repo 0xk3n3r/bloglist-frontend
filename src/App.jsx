@@ -24,7 +24,7 @@ const Menu = () => {
   }
   return (
     <div>
-      Welcome 2025
+     <Button variant="secondary" onClick={() => handleLogout(setUser)} className="mt-2">logout</Button>
     </div>
   )
 }
@@ -63,53 +63,44 @@ const App = () => {
     dispatch(initializeBlogs())
   }, [dispatch])
 
-  const loginForm = () => (
-    <div>
-      <h2>Welcome</h2>
-      {!user && (
-        <Togglable buttonLabel="log in">
-          <LoginForm
-            username={username}
-            password={password}
-            handleUsernameChange={({ target }) => setUsername(target.value)}
-            handlePasswordChange={({ target }) => setPassword(target.value)}
-            handleLogin={() =>
-              handleLogin(
-                username,
-                password,
-                dispatch,
-                triggerNotification,
-                setUser,
-                setUsername,
-                setPassword
-              )
-            }
-          />
-        </Togglable>
-      )}
-    </div>
-  )
-
   const padding = {
     padding: 5
   }
 
   return (
     <Router>
-      
       <div className="container">
-        <h2>blogs</h2>
-        <Link style={padding} to="/">home</Link>
+        <h2>BLOG 2025</h2>
         <Notification />
         {user === null ? (
-          loginForm()
+          <LoginForm />
         ) : (
           <div>
-            <p>{user.name} logged in</p>
-            <button onClick={() => handleLogout(setUser)}>logout</button>
-            <Link style={padding} to="/users">users</Link>
-            <Link style={padding} to="/blogs">blogs</Link>
-            <Togglable buttonLabel="ADD blog">
+
+            <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav className="me-auto">
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/">home</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/users">users</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  <Link style={padding} to="/blogs">blogs</Link>
+                </Nav.Link>
+                <Nav.Link href="#" as="span">
+                  {user
+                    ? <em style={padding}>{user.name} logged in</em>
+                    : <Link style={padding} to="/login">login</Link>
+                  }
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+
+            <Togglable buttonLabel="Add blog">
               <BlogForm />
             </Togglable>
           </div>

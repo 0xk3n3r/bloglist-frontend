@@ -64,7 +64,7 @@ const LoginForm = () => {
 
   return (
     <>
-      <h2>Log into BlogApp:</h2>
+      <h2>Log in:</h2>
       {!user ? (
         <form onSubmit={handleSubmit}>
           <Form.Group>
